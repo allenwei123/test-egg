@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>my server web</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+        #app {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            background: skyblue;
+        }
+
+        .fetch {
+            color: red;
+            font-size: 18px;
+            font-weight: 800;
+            display: none;
+        }
+
+        button {
+            color: blue;
+            font-weight: 600;
+        }
+        .list {
+            list-style: none;
+        }
+        li {
+            width: 200px;
+            height: 40px;
+            line-height: 40px;
+            background: #ccc;
+            color: firebrick;
+            border-bottom: 1px solid black;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>我的页面</h1>
+    <div id="app">app</div>
+    <div>
+        <button class="c-getList">获取列表</button>
+        <button class="c-getUser">获取用户信息</button>
+    </div>
+    <div class="fetch"> </div>
+    <div>
+        <ul class="list">
+
+        </ul>
+    </div>
+
+    
+</body>
+<script src="https://cdn.bootcss.com/fetch/2.0.4/fetch.js"></script>
+<script>
+    $('#app').on('click', async () => {
+        try {
+            let response = await fetch('first');
+            let data = await response.json();
+            let str = '我通过fetch发请求所获得的值是：' + data.name;
+            $('.fetch').html(str).css({
+                'display': 'block'
+            })
+        } catch (e) {
+            console.log("error")
+        }
+
+    })
+    $('.c-getList').on('click', () => {
+        getList().then(res => {
+            if(res.length){
+                res.forEach(item => {
+                    let str = item.name;
+                    $('.list').append('<li>' + str +'</li>');
+                });
+            }
+        })
+    })
+    $('.c-getUser').on('click', () => {
+        getUser().then(res => {
+            console.log(res)
+        })
+    })
+    async function getList() {
+        try {
+            let response = await fetch('getList');
+            let data = await response.json();
+            return data;
+        } catch (e) {
+            console.log("error")
+        }
+    }
+
+    async function getUser() {
+        try {
+            let response = await fetch('user');
+            let data = await response.json();
+            return data;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+</script>
+
+</html>
